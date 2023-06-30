@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useGetFilter } from '../../hooks/ui/useGetFilter';
+import LoadingComponent from '../spinner/spinner';
+import Error500Component from '../errors/500';
 
 const queryClient = new QueryClient()
 
@@ -33,11 +35,11 @@ const Table: React.FC<TableProps> = ({ title, config, headers }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent/>
   }
 
   if (isError) {
-    return <div>Error occurred while fetching stores.</div>;
+    return <Error500Component/>
   }
 
   return (
@@ -98,7 +100,7 @@ const Table: React.FC<TableProps> = ({ title, config, headers }) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center pt-4">
+        <div className="flex items-center justify-center pt-4 pb-8">
           <button
             className="py-2 px-4 bg-blue-500 text-white rounded-md mr-2"
             disabled={page === 1}
