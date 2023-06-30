@@ -1,6 +1,7 @@
 import TableComponent from '@/components/table/table';
 
 const title = 'Store List'
+const createRoute = '/store/create'
 
 enum Headers {
   Name = "name",
@@ -26,6 +27,6 @@ const config = [
 
 export default function Store() {
   return (
-     <TableComponent title={title} config={config} headers={Headers}  />
+     <TableComponent title={title} config={config} headers={Headers} createRoute={createRoute}  />
   );
 }
