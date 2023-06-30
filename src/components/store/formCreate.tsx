@@ -41,49 +41,51 @@ const FormCreateStore: React.FC = () => {
       >
         {({ values, errors, touched }) => (
           <Form>
-            <div className="mb-4">
-              <label htmlFor="name" className="block font-medium mb-1">
-                Name:
-              </label>
-              <Field
-                type="text"
-                id="name"
-                name="name"
-                className={`border rounded w-full py-2 px-3 ${errors.name && touched.name ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.name && touched.name && (
-                <div className="text-red-500 text-sm">{errors.name}</div>
-              )}
-            </div>
+            <div className="flex flex-wrap mb-8">
+              <div className="mr-4">
+                <label htmlFor="name" className="block font-medium mb-1">
+                  Name:
+                </label>
+                <Field
+                  type="text"
+                  id="name"
+                  name="name"
+                  className={`border rounded w-full py-2 px-3 ${errors.name && touched.name ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {errors.name && touched.name && (
+                  <div className="text-red-500 text-sm">{errors.name}</div>
+                )}
+              </div>
 
-            <div className="mb-4">
-              <label htmlFor="description" className="block font-medium mb-1">
-                Description:
-              </label>
-              <Field
-                type="text"
-                id="description"
-                name="description"
-                className={`border rounded w-full py-2 px-3 ${errors.description && touched.description ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.description && touched.description && (
-                <div className="text-red-500 text-sm">{errors.description}</div>
-              )}
-            </div>
+              <div className="mr-4">
+                <label htmlFor="description" className="block font-medium mb-1">
+                  Description:
+                </label>
+                <Field
+                  type="text"
+                  id="description"
+                  name="description"
+                  className={`border rounded w-full py-2 px-3 ${errors.description && touched.description ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {errors.description && touched.description && (
+                  <div className="text-red-500 text-sm">{errors.description}</div>
+                )}
+              </div>
 
-            <div className="mb-4">
-              <label htmlFor="email" className="block font-medium mb-1">
-                Email:
-              </label>
-              <Field
-                type="text"
-                id="email"
-                name="email"
-                className={`border rounded w-full py-2 px-3 ${errors.email && touched.email ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.email && touched.email && (
-                <div className="text-red-500 text-sm">{errors.email}</div>
-              )}
+              <div className="mr-4">
+                <label htmlFor="email" className="block font-medium mb-1">
+                  Email:
+                </label>
+                <Field
+                  type="text"
+                  id="email"
+                  name="email"
+                  className={`border rounded w-full py-2 px-3 ${errors.email && touched.email ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {errors.email && touched.email && (
+                  <div className="text-red-500 text-sm">{errors.email}</div>
+                )}
+              </div>
             </div>
 
             {/*TODO: errors msg type*/}
