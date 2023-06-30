@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useGetStore } from '../../hooks/useGetStore';
+import { useGetFilter } from '../../hooks/ui/useGetFilter';
 
 const queryClient = new QueryClient()
 
-const StoreList: React.FC = () => {
+type TableProps = {
+  title: string;
+  config: any;
+  headers: any;
+}
+
+const Table: React.FC<TableProps> = ({ title, config, headers }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const { data, isLoading, isError } = useGetStore({ searchQuery, page, limit });
+  const { data, isLoading, isError } = useGetFilter({ searchQuery, page, limit });
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -37,7 +43,7 @@ const StoreList: React.FC = () => {
   return (
     <>
       <section className="container px-4 mx-auto p-2">
-        <h1 className="text-2xl font-bold text-gray-500 pb-4">Store list</h1>
+        <h1 className="text-2xl font-bold text-gray-500 pb-4"> {title} </h1>
         <div className="relative" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <input type="text" value={searchQuery} onChange={handleSearch} className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent" placeholder="search..." defaultValue="" />
           <svg className="w-4 h-4 absolute left-2.5 top-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,59 +68,28 @@ const StoreList: React.FC = () => {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        Name
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        Description
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        Email
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        Phone
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        Address
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        City
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        State
-                      </th>
-                      <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        Zip
-                      </th>
+                      {Object.values(headers).map((field: any) => (
+                        <th
+                          key={field}
+                          scope="col"
+                          className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                          {field}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {data && data.map((store, index) => (
+                    {data && data.map((store: any, index:any) => (
                       <tr key={store.id || index}>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.name}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.description}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.email}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.phone}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.address}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.city}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.state}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {store.zip}
-                        </td>
+                        {config.map((field: any) => (
+                          <td
+                            key={field.key}
+                            className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
+                          >
+                            {store[field.key]}
+                          </td>
+                        ))}
                       </tr>
                     ))}
                   </tbody>
@@ -144,18 +119,13 @@ const StoreList: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
+const TableComponent: React.FC<TableProps> = ({ title, config, headers }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <StoreList />
+      <Table title={title} config={config} headers={headers} />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };
 
-export default App;
-
-
-
-
-
+export default TableComponent;
