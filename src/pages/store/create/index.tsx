@@ -1,7 +1,9 @@
-export default function CreatePage() {
+import FormCreateStoreComponent from "@/components/store/formCreate";
+
+export default function CreateStorePage() {
   return (
     <>
-     Crear store
+     <FormCreateStoreComponent/>
     </>
   );
 }
