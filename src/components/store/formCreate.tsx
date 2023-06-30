@@ -1,7 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
-import * as Yup from 'yup';
-import { QueryClientProvider, useMutation, QueryClient } from '@tanstack/react-query';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Link from 'next/link';
 import { CreateFormValues } from '@/domain/stores/CreateForm';
@@ -86,6 +85,95 @@ const FormCreateStore: React.FC = () => {
                 <div className="text-red-500 text-sm">{errors.email}</div>
               )}
             </div>
+
+            {/*TODO: errors msg type*/}
+            <FieldArray name="items">
+              {({ form, push, remove }) => (
+                <>
+                  <div style={{ display: 'flex' }}>
+                    <h2 className="text-lg font-semibold mb-2 mr-2 mt-1">Items</h2>
+                    <button type="button" onClick={() => push({ name: '', description: '', price: '', quantity: '' })} className="text-sm text-blue-500">
+                      Add Items
+                    </button>
+                  </div>
+                  <div>
+                    {form.values.items.length === 0 && errors.items && (
+                      <div className="text-red-500 text-sm">{errors.items}</div>
+                    )}
+                  </div>
+                  {values.items.map((item, index) => (
+                    <div key={index} className="mb-4">
+                      <h3 className="text-sm font-medium mb-1">Item {index + 1}</h3>
+                      <div className="flex">
+                        <div className="mr-4">
+                          <label htmlFor={`items[${index}].name`} className="block mb-1">
+                            Name:
+                          </label>
+                          <Field
+                            type="text"
+                            id={`items[${index}].name`}
+                            name={`items[${index}].name`}
+                            className={`border rounded w-full py-2 px-3 ${errors.items?.[index]?.name && touched.items?.[index]?.name ? 'border-red-500' : 'border-gray-300'}`}
+                          />
+                          {errors.items?.[index]?.name && touched.items?.[index]?.name && (
+                            <div className="text-red-500 text-sm">{errors.items[index].name}</div>
+                          )}
+                        </div>
+                        <div className="mr-4">
+                          <label htmlFor={`items[${index}].description`} className="block mb-1">
+                            Description:
+                          </label>
+                          <Field
+                            type="text"
+                            id={`items[${index}].description`}
+                            name={`items[${index}].description`}
+                            className={`border rounded w-full py-2 px-3 ${errors.items?.[index]?.description && touched.items?.[index]?.description ? 'border-red-500' : 'border-gray-300'}`}
+                          />
+                          {errors.items?.[index]?.description && touched.items?.[index]?.description && (
+                            <div className="text-red-500 text-sm">{errors.items[index].description}</div>
+                          )}
+                        </div>
+
+                        <div className="mr-4">
+                          <label htmlFor={`items[${index}].price`} className="block mb-1">
+                            Price USD:
+                          </label>
+                          <Field
+                            type="number"
+                            id={`items[${index}].price`}
+                            name={`items[${index}].price`}
+                            className={`border rounded w-full py-2 px-3 ${errors.items?.[index]?.price && touched.items?.[index]?.price ? 'border-red-500' : 'border-gray-300'}`}
+                          />
+                          {errors.items?.[index]?.price && touched.items?.[index]?.price && (
+                            <div className="text-red-500 text-sm">{errors.items[index].price}</div>
+                          )}
+                        </div>
+
+                        <div className="mr-4">
+                          <label htmlFor={`items[${index}].quantity`} className="block mb-1">
+                            Quantity:
+                          </label>
+                          <Field
+                            type="number"
+                            id={`items[${index}].quantity`}
+                            name={`items[${index}].quantity`}
+                            className={`border rounded w-full py-2 px-3 ${errors.items?.[index]?.quantity && touched.items?.[index]?.quantity ? 'border-red-500' : 'border-gray-300'}`}
+                          />
+                          {errors.items?.[index]?.quantity && touched.items?.[index]?.quantity && (
+                            <div className="text-red-500 text-sm">{errors.items[index].quantity}</div>
+                          )}
+                        </div>
+
+
+                      </div>
+                      <button type="button" onClick={() => remove(index)} className="text-sm text-red-500 mt-1">
+                        Remove Item
+                      </button>
+                    </div>
+                  ))}
+                </>
+              )}
+            </FieldArray>
 
             <button
               type="submit"
