@@ -4,64 +4,18 @@ import * as Yup from 'yup';
 import { QueryClientProvider, useMutation, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Link from 'next/link';
+import { CreateFormValues } from '@/domain/stores/CreateForm';
+import { useCreateStore } from '@/hooks/use-cases/usePostStore';
+import { storeSchema } from './formValidation';
 
 const queryClient = new QueryClient()
 
-type Item = {
-  name?: string;
-  description?: string;
-  price?: string;
-  quantity?: string;
-}
-
-type FormValues = {
-  name: string;
-  description: string;
-  email: string;
-  items: Item[];
-};
-
-const storeSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  errosItems: Yup.array()
-    .of(
-      Yup.object().shape({
-        name: Yup.string().required('Item name is required'),
-        description: Yup.string().required('Item description is required'),
-        price: Yup.number().required('Item price is required').positive('Price must be positive'),
-        quantity: Yup.number().required('Item quantity is required').integer('Quantity must be an integer').positive('Quantity must be positive'),
-      })
-    )
-    .min(1, 'At least one item must be added'),
-});
-
-const useCreateStore = () => {
-  const mutation = useMutation((data: FormValues) => {
-    const { name, description, email, items } = data;
-    const payload = {
-      name,
-      description,
-      email,
-      items: []
-    };
-
-    return fetch('/api/stores', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    }).then(res => res.json());
-  });
-
-  return mutation;
-};
-
+// Form config
+const fields: (keyof CreateFormValues)[] = ['name', 'description', 'email', 'items'];
+const endpoint = '/api/stores';
 
 const FormCreateStore: React.FC = () => {
-  const mutation = useCreateStore();
+  const mutation = useCreateStore(fields, endpoint);
 
   return (
     <div className="container mx-auto mt-8">
@@ -73,12 +27,12 @@ const FormCreateStore: React.FC = () => {
           </Link>
         </div>
       </div>
-      <Formik<FormValues>
+      <Formik<CreateFormValues>
         initialValues={{
           name: '',
           description: '',
           email: '',
-          items: [{ name: '', description: '', price: '', quantity: '' }],
+          items: [],
         }}
         validationSchema={storeSchema}
         onSubmit={(values, { resetForm }) => {
