@@ -47,10 +47,18 @@ const useCreateStore = () => {
       items: []
     };
 
-    return fetch('/api/stores', { method: 'POST', body: JSON.stringify(payload) }).then(res => res.json());
+    return fetch('/api/stores', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).then(res => res.json());
   });
+
   return mutation;
 };
+
 
 const FormCreateStore: React.FC = () => {
   const mutation = useCreateStore();
