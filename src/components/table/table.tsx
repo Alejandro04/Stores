@@ -6,6 +6,7 @@ import LoadingComponent from '../spinner/spinner';
 import Error500Component from '../errors/500';
 import Link from 'next/link';
 import Pagination from './pagination';
+import Filter from './filter';
 
 const queryClient = new QueryClient()
 
@@ -23,22 +24,17 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
 
   const { data, isLoading, isError } = useGetFilter({ searchQuery, page, limit });
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-    setPage(1);
-  };
-
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
     setPage(1);
   };
 
   if (isLoading) {
-    return <LoadingComponent/>
+    return <LoadingComponent />
   }
 
   if (isError) {
-    return <Error500Component/>
+    return <Error500Component />
   }
 
   return (
@@ -46,26 +42,27 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
       <section className="container px-4 mx-auto p-2">
         <h1 className="text-2xl font-bold text-gray-500 pb-4"> {title} </h1>
         <div className="relative" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <input type="text" value={searchQuery} onChange={handleSearch} className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent" placeholder="search..." defaultValue="" />
-          <svg className="w-4 h-4 absolute left-2.5 top-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          <Filter
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            setPage={setPage}
+          />
 
           <div>
-          <select
-            value={limit}
-            onChange={(e) => handleLimitChange(Number(e.target.value))}
-            className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent"
-          >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
+            <select
+              value={limit}
+              onChange={(e) => handleLimitChange(Number(e.target.value))}
+              className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
 
-          <Link href={createRoute} className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Create
-          </Link>
+            <Link href={createRoute} className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Create
+            </Link>
           </div>
         </div>
         <div className="flex flex-col pt-4">
@@ -87,7 +84,7 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {data && data.map((store: any, index:any) => (
+                    {data && data.map((store: any, index: any) => (
                       <tr key={store.id || index}>
                         {config.map((field: any) => (
                           <td
