@@ -1,11 +1,18 @@
 import React from "react";
 
-export default function Filter({ searchQuery, setSearchQuery, setPage }: { searchQuery: any, setSearchQuery: any, setPage: any }) {
+type FilterProps = {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  setPage: (page: number) => void;
+};
+
+const Filter: React.FC<FilterProps> = ({ searchQuery, setSearchQuery, setPage }) => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     setPage(1);
   };
+
   return (
     <>
       <input type="text" value={searchQuery} onChange={handleSearch} className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent" placeholder="search..." defaultValue="" />
@@ -15,3 +22,5 @@ export default function Filter({ searchQuery, setSearchQuery, setPage }: { searc
     </>
   );
 }
+
+export default Filter;

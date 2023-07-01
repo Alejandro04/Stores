@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function Pagination({ page, setPage }: { page: any, setPage: any }) {
+type PaginationProps = {
+  page: number;
+  setPage: (page: number) => void;
+};
+
+const Pagination: React.FC<PaginationProps> = ({ page, setPage }) => {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -25,3 +30,5 @@ export default function Pagination({ page, setPage }: { page: any, setPage: any 
     </div>
   );
 }
+
+export default Pagination;

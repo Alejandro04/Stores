@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function RowsPagePage({ limit, setLimit, setPage }: { limit: any, setLimit: any, setPage: any }) {
+type RowsPagePageProps = {
+  limit: number;
+  setLimit: (limit: number) => void;
+  setPage: (page: number) => void;
+};
+
+const RowsPagePage: React.FC<RowsPagePageProps> = ({ limit, setLimit, setPage }) => {
 
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
@@ -20,3 +26,5 @@ export default function RowsPagePage({ limit, setLimit, setPage }: { limit: any,
     </select>
   );
 }
+
+export default RowsPagePage;
