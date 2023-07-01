@@ -7,6 +7,7 @@ import Error500Component from '../errors/500';
 import Link from 'next/link';
 import Pagination from './pagination';
 import Filter from './filter';
+import RowsPagePage from './rowsPerPage';
 
 const queryClient = new QueryClient()
 
@@ -23,11 +24,6 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
   const [limit, setLimit] = useState(10);
 
   const { data, isLoading, isError } = useGetFilter({ searchQuery, page, limit });
-
-  const handleLimitChange = (newLimit: number) => {
-    setLimit(newLimit);
-    setPage(1);
-  };
 
   if (isLoading) {
     return <LoadingComponent />
@@ -47,19 +43,12 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
             setSearchQuery={setSearchQuery}
             setPage={setPage}
           />
-
           <div>
-            <select
-              value={limit}
-              onChange={(e) => handleLimitChange(Number(e.target.value))}
-              className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
-
+            <RowsPagePage 
+              limit={limit} 
+              setLimit={setLimit} 
+              setPage={setPage} 
+            />
             <Link href={createRoute} className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Create
             </Link>
