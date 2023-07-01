@@ -104,11 +104,13 @@ const FormCreateStore: React.FC = () => {
                       <div className="text-red-500 text-sm">{errors.items}</div>
                     )}
                   </div>
+
+
                   {values.items.map((item, index) => (
-                    <div key={index} className="mb-4">
+                    <div key={index}>
                       <h3 className="text-sm font-medium mb-1">Item {index + 1}</h3>
-                      <div className="flex">
-                        <div className="mr-4">
+                      <div className={`${styles.formItemsContainer}`}>
+                        <div className='p-2'>
                           <label htmlFor={`items[${index}].name`} className="block mb-1">
                             Name:
                           </label>
@@ -122,7 +124,7 @@ const FormCreateStore: React.FC = () => {
                             <div className="text-red-500 text-sm">{errors.items[index].name}</div>
                           )}
                         </div>
-                        <div className="mr-4">
+                        <div className='p-2'>
                           <label htmlFor={`items[${index}].description`} className="block mb-1">
                             Description:
                           </label>
@@ -136,8 +138,7 @@ const FormCreateStore: React.FC = () => {
                             <div className="text-red-500 text-sm">{errors.items[index].description}</div>
                           )}
                         </div>
-
-                        <div className="mr-4">
+                        <div className='p-2'>
                           <label htmlFor={`items[${index}].price`} className="block mb-1">
                             Price USD:
                           </label>
@@ -151,8 +152,7 @@ const FormCreateStore: React.FC = () => {
                             <div className="text-red-500 text-sm">{errors.items[index].price}</div>
                           )}
                         </div>
-
-                        <div className="mr-4">
+                        <div className='p-2'>
                           <label htmlFor={`items[${index}].quantity`} className="block mb-1">
                             Quantity:
                           </label>
@@ -166,14 +166,13 @@ const FormCreateStore: React.FC = () => {
                             <div className="text-red-500 text-sm">{errors.items[index].quantity}</div>
                           )}
                         </div>
-
-
-                      </div>
+                      </div >
                       <button type="button" onClick={() => remove(index)} className="text-sm text-red-500 mt-1">
                         Remove Item
                       </button>
                     </div>
                   ))}
+
                 </>
               )}
             </FieldArray>
