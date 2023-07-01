@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Pagination from './pagination';
 import Filter from './filter';
 import RowsPagePage from './rowsPerPage';
+import styles from './table.module.scss'
 
 const queryClient = new QueryClient()
 
@@ -33,17 +34,19 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
     return <Error500Component />
   }
 
+  const relativeClass = 'relative'
+
   return (
     <>
       <section className="container px-4 mx-auto p-2">
         <h1 className="text-2xl font-bold text-gray-500 pb-4"> {title} </h1>
-        <div className="relative" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={`${styles.headerContainer} ${relativeClass}`}>
           <Filter
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             setPage={setPage}
           />
-          <div>
+          <div className={`${styles.headerItemsContainer}`}>
             <RowsPagePage 
               limit={limit} 
               setLimit={setLimit} 

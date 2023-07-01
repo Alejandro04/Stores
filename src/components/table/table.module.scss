@@ -1,0 +1,14 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 760px) {
+    display: block;
+  }
+}
+
+.headerItemsContainer{
+  @media (max-width: 760px) {
+    margin-top: 10px;
+  }
+}
