@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { CreateFormValues } from '@/domain/stores/CreateForm';
 import { useCreateStore } from '@/hooks/use-cases/usePostStore';
 import { storeSchema } from './formValidation';
+import styles from './form.module.scss';
 
 const queryClient = new QueryClient()
 
@@ -17,11 +18,11 @@ const FormCreateStore: React.FC = () => {
   const mutation = useCreateStore(fields, endpoint);
 
   return (
-    <div className="container mx-auto mt-8">
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div className="container mx-auto mt-8 p-4">
+      <div className={`${styles.headerItemsContainer}`}>
         <h1 className="text-3xl font-bold mb-4">Create Store</h1>
         <div>
-          <Link href='/store' className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Link href='/store' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Back
           </Link>
         </div>
