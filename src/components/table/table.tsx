@@ -5,6 +5,7 @@ import { useGetFilter } from '../../hooks/ui/useGetFilter';
 import LoadingComponent from '../spinner/spinner';
 import Error500Component from '../errors/500';
 import Link from 'next/link';
+import Pagination from './pagination';
 
 const queryClient = new QueryClient()
 
@@ -25,10 +26,6 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     setPage(1);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
   };
 
   const handleLimitChange = (newLimit: number) => {
@@ -108,22 +105,7 @@ const Table: React.FC<TableProps> = ({ title, config, headers, createRoute }) =>
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center pt-4 pb-8">
-          <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-md mr-2"
-            disabled={page === 1}
-            onClick={() => handlePageChange(page - 1)}
-          >
-            Previous
-          </button>
-          <span className="text-lg font-bold">Page: {page}</span>
-          <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-md ml-2"
-            onClick={() => handlePageChange(page + 1)}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination page={page} setPage={setPage} />
       </section>
     </>
   );
