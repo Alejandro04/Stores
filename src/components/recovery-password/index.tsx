@@ -32,11 +32,12 @@ export default function RecoveryPasswordForm() {
         </h2>
         <p
           className={
-            'not-italic font-normal text-base md:text-lg leading-[30px] text-[#4f4f4f] mb-[33px] text-center'
+            'not-italic font-normal text-base md:text-lg leading-[30px] text-[#4f4f4f] mb-[10px] text-center'
           }
         >
-          Al terminar, iniciarás sesión de nuevo
+          Ingresa el código de verificación que te enviamos a tu correo electrónico y tu nueva contraseña.
         </p>
+        <p className="mt-1 text-sm text-gray-400  mb-[10px]">Nota: Es posible que tu correo haya llegado a la bandeja de spam, no olvides revisar esta carpeta.</p>
 
         <Formik
           initialValues={{
@@ -71,10 +72,6 @@ export default function RecoveryPasswordForm() {
               });
             } catch (error:any) {
               const { message } = error;
-              /*TODO: Crear una interfaz donde se definan todos los tipos
-              de error que devuelve cognito en este punto y traducirlos a español.
-              Luego, crear una funcion que muestre el 
-              mensaje de error adecuado aqui */
               actions.setErrors({
                 errorService: message,
               });
