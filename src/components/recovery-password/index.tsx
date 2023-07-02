@@ -13,6 +13,7 @@ interface FormValues {
   verificationCode: string;
   password: string;
   passwordConfirmation: string;
+  errorService: string;
 }
 
 export default function RecoveryPasswordForm() {
@@ -42,7 +43,8 @@ export default function RecoveryPasswordForm() {
             email: '',
             verificationCode: '',
             password: '',
-            passwordConfirmation: ''
+            passwordConfirmation: '',
+            errorService: ''
           }}
           validate={(values) => {
             const errors: FormikErrors<FormValues> = {};
@@ -67,9 +69,16 @@ export default function RecoveryPasswordForm() {
                   ...query,
                 },
               });
-            } catch (error) {
+            } catch (error:any) {
+              const { message } = error;
+              /*TODO: Crear una interfaz donde se definan todos los tipos
+              de error que devuelve cognito en este punto y traducirlos a español.
+              Luego, crear una funcion que muestre el 
+              mensaje de error adecuado aqui */
+              actions.setErrors({
+                errorService: message,
+              });
               setIsLoading(false);
-              console.log("error", error)
               toast.error('Ha ocurrido un error al intentar crear la nueva contraseña');
             }
           }}
@@ -134,6 +143,10 @@ export default function RecoveryPasswordForm() {
                   labelClassName={'font-normal text-[15px] leading-6 text-[#333333]'}
                 />
                 <ErrorMessage name="passwordConfirmationMsg" component="div" className="text-red-500" />
+              </div>
+
+              <div className='mt-2'>
+                <ErrorMessage name="errorService" component="div" className="text-red-500" />
               </div>
 
               <div>
