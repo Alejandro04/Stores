@@ -61,9 +61,12 @@ export default function RecoveryPasswordForm() {
             setIsLoading(true);
             try {
               await Auth.forgotPasswordSubmit(values.email.trim().toLowerCase(), values.verificationCode, values.password);
-
               toast.info('Se ha creado la nueva contraseña correctamente');
-
+              
+              await Auth.signIn({
+                username: values.email.trim().toLowerCase(),
+                password: values.password,
+              });
               push({
                 pathname: '/store',
                 query: {
