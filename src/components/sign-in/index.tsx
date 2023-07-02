@@ -70,7 +70,9 @@ export function SignInForm() {
               });
               toast.success('Se ha iniciado sesión correctamente');
               setIsRedirecting(true);
-              alert('Se ha iniciado sesión correctamente');
+              push({
+                pathname: '/store',
+              });
             } catch (error) {
               console.log('An error occurred while signing in', error);
               const errorMessage = 'Ha ocurrido un error, por favor intenta de nuevo';

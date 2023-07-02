@@ -1,7 +1,10 @@
 import Store from "@/components/store/store";
+import withAuth from "@/components/wrapper";
 
-export default function StorePage() {
+function StorePage() {
   return (
     <Store />
   );
 }
+
+export default withAuth(StorePage)

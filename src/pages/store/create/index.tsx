@@ -1,7 +1,10 @@
 import FormCreateStoreComponent from "@/components/store/formCreate";
+import withAuth from "@/components/wrapper";
 
-export default function CreateStorePage() {
+function CreateStorePage() {
   return (
     <FormCreateStoreComponent />
   );
 }
+
+export default withAuth(CreateStorePage)
