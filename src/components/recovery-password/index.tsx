@@ -1,6 +1,6 @@
-import { Field, Form, Formik, FormikProps } from 'formik';
+import { Field, Form, Formik, FormikProps, ErrorMessage, FormikErrors } from 'formik';
 import React, { useState } from 'react';
-import { Button} from 'reactstrap';
+import { Button } from 'reactstrap';
 import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
@@ -19,7 +19,7 @@ export default function RecoveryPasswordForm() {
   const { push, query } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  return ( 
+  return (
     <div className={'px-2'}>
       <div
         className={
@@ -34,7 +34,7 @@ export default function RecoveryPasswordForm() {
             'not-italic font-normal text-base md:text-lg leading-[30px] text-[#4f4f4f] mb-[33px] text-center'
           }
         >
-         Al terminar, iniciarás sesión de nuevo
+          Al terminar, iniciarás sesión de nuevo
         </p>
 
         <Formik
@@ -44,24 +44,34 @@ export default function RecoveryPasswordForm() {
             password: '',
             passwordConfirmation: ''
           }}
+          validate={(values) => {
+            const errors: FormikErrors<FormValues> = {};
+            if (values.password !== values.passwordConfirmation) {
+              errors.passwordConfirmation = 'Las contraseñas no coinciden';
+            }
+            if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(values.password)) {
+              errors.password = 'La contraseña no cumple con los requisitos';
+            }
+            return errors;
+          }}
           onSubmit={async (values, actions) => {
-            // localStorage.setItem('forgotPasswordEmail', values.email.trim().toLowerCase());
-            // setIsLoading(true);
-            // try {
-            //   await Auth.forgotPassword(values.email.trim().toLowerCase());
+            setIsLoading(true);
+            try {
+              await Auth.forgotPasswordSubmit(values.email.trim().toLowerCase(), values.verificationCode, values.password);
 
-            //   toast.info('Se ha enviado un correo de verificación a tu cuenta de correo electrónico');
+              toast.info('Se ha creado la nueva contraseña correctamente');
 
-            //   push({
-            //     pathname: '/recovery-password',
-            //     query: {
-            //       ...query,
-            //     },
-            //   });
-            // } catch (error) {
-            //   setIsLoading(false);
-            //   toast.error('Ha ocurrido un error al intentar recuperar tu contraseña');
-            // }
+              push({
+                pathname: '/store',
+                query: {
+                  ...query,
+                },
+              });
+            } catch (error) {
+              setIsLoading(false);
+              console.log("error", error)
+              toast.error('Ha ocurrido un error al intentar crear la nueva contraseña');
+            }
           }}
         >
           {(props: FormikProps<FormValues>) => (
@@ -97,6 +107,7 @@ export default function RecoveryPasswordForm() {
                   type="password"
                   name="password"
                   id="password"
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                   placeholder="Nueva contraseña"
                   required
                   label="Nueva contraseña *"
@@ -104,6 +115,11 @@ export default function RecoveryPasswordForm() {
                   className={'h-16 border text-sm rounded-2xl border-solid p-2.5 border-[#e0e0e0] w-full mt-2'}
                   labelClassName={'font-normal text-[15px] leading-6 text-[#333333]'}
                 />
+                <p className={'mt-1 text-sm text-gray-400'}>
+                  La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una
+                  letra minúscula, un número y un carácter especial
+                </p>
+                <ErrorMessage name="passwordPattern" component="div" className="text-red-500" />
               </div>
               <div className='mt-2'>
                 <Field
@@ -117,6 +133,7 @@ export default function RecoveryPasswordForm() {
                   className={'h-16 border text-sm rounded-2xl border-solid p-2.5 border-[#e0e0e0] w-full mt-2'}
                   labelClassName={'font-normal text-[15px] leading-6 text-[#333333]'}
                 />
+                <ErrorMessage name="passwordConfirmationMsg" component="div" className="text-red-500" />
               </div>
 
               <div>
